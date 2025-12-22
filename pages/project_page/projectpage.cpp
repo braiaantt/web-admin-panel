@@ -1,5 +1,6 @@
 #include "projectpage.h"
 #include "ui_projectpage.h"
+#include <QMessageBox>
 #include "technologyrelation.h"
 #include "handleimages.h"
 #include "featureshandler.h"
@@ -49,6 +50,7 @@ void ProjectPage::connectSignalsAndSlots()
     connect(technologyService, &TechnologyService::errorOcurred, this, &ProjectPage::errorOcurred);
 
     connect(projectService, &ProjectService::projectDeleted, this, &ProjectPage::projectDeleted);
+    connect(projectService, &ProjectService::projectUpdated, this, &ProjectPage::projectUpdated);
     connect(projectService, &ProjectService::errorOcurred, this, &ProjectPage::errorOcurred);
 }
 
@@ -56,7 +58,46 @@ void ProjectPage::connectSignalsAndSlots()
 
 void ProjectPage::on_pushButtonBack_clicked()
 {
+    if(projectChanged)
+        emit refreshProject(project);
+
     emit backToPortfolio(this);
+}
+
+void ProjectPage::on_pushButtonUpdateTitle_clicked()
+{
+    QString newTitle = ui->lineEditTitle->text();
+    Project p;
+    p.setName(newTitle);
+
+    projectService->updateProject(p, project.getId());
+}
+
+void ProjectPage::on_pushButtonUpdateMyComment_clicked()
+{
+    QString newUserComment = ui->plainTextEditMyComments->toPlainText();
+    Project p;
+    p.setUserComments(newUserComment);
+
+    projectService->updateProject(p, project.getId());
+}
+
+void ProjectPage::on_pushButtonUpdateSmallAbout_clicked()
+{
+    QString newSmallAbout = ui->plainTextEditSmallAbout->toPlainText();
+    Project p;
+    p.setSmallAbout(newSmallAbout);
+
+    projectService->updateProject(p, project.getId());
+}
+
+void ProjectPage::on_pushButtonUpdateBigAbout_clicked()
+{
+    QString newBigAbout = ui->plainTextEditBigAbout->toPlainText();
+    Project p;
+    p.setBigAbout(newBigAbout);
+
+    projectService->updateProject(p, project.getId());
 }
 
 void ProjectPage::on_pushButtonAddTechnology_clicked()
@@ -104,6 +145,17 @@ void ProjectPage::technologiesRelated(const QVector<Technology> &techs)
 void ProjectPage::techIconReceipt(int techId, const QPixmap &pixmap)
 {
     ui->scrollAreaTechnologies->setTechIcon(techId, pixmap);
+}
+
+void ProjectPage::projectUpdated(const Project &updated)
+{
+    project.setName(updated.getName());
+    project.setSmallAbout(updated.getSmallAbout());
+    project.setBigAbout(updated.getBigAbout());
+    project.setUserComments(updated.getUserComments());
+
+    projectChanged = true;
+    QMessageBox::information(this, "Mensaje", "El proyecto fue actualizado correctamente!");
 }
 
 void ProjectPage::projectDeleted()
