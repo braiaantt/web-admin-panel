@@ -75,6 +75,18 @@ void ProjectService::getProjectImagePaths(int projectId)
     connect(reply, &QNetworkReply::finished, this, &ProjectService::getImagePathsFinished);
 }
 
+void ProjectService::updateProject(const Project &project, int projectId)
+{
+    QByteArray body = getProjectUpdateBody(project);
+    QNetworkReply *reply = apiClient->updateProject(body, projectId);
+    if(!reply){
+        emit errorOcurred("ProjectService - UpdateProject: Reply Null. Not Sended");
+        return;
+    }
+
+    connect(reply, &QNetworkReply::finished, this, &ProjectService::updateProjectFinished);
+}
+
 void ProjectService::deleteProject(int projectId)
 {
     QNetworkReply *reply = apiClient->deleteProject(projectId);
@@ -176,6 +188,22 @@ void ProjectService::getImagePathsFinished()
     handleGetImagePaths(paths, reply->readAll());
 
     emit imagePathsReceipt(paths);
+    reply->deleteLater();
+}
+
+void ProjectService::updateProjectFinished()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+
+    QString errorMsg;
+    if(!NetworkUtils::checkError(reply, errorMsg)){
+        emit errorOcurred("ProjectService - UpdateProject: " + errorMsg);
+        reply->deleteLater();
+        return;
+    }
+
+    Project project = handleUpdateProjectFinished(reply->readAll());
+    emit projectUpdated(project);
     reply->deleteLater();
 }
 
@@ -301,3 +329,45 @@ void ProjectService::handleGetImagePaths(QVector<QString> &container, const QByt
         container.append(value.toString());
     }
 }
+
+Project ProjectService::handleUpdateProjectFinished(const QByteArray &data)
+{
+    QJsonDocument doc = QJsonDocument::fromJson(data);
+    QJsonObject obj = doc.object();
+    Project project;
+
+    project.setName(obj["name"].toString());
+    project.setSmallAbout(obj["small_about"].toString());
+    project.setBigAbout(obj["big_about"].toString());
+    project.setUserComments(obj["user_comment"].toString());
+
+    return project;
+}
+
+QByteArray ProjectService::getProjectUpdateBody(const Project &project)
+{
+    QString title = project.getName();
+    QString userComment = project.getUserComments();
+    QString smallAbout = project.getSmallAbout();
+    QString bigAbout = project.getBigAbout();
+    QJsonObject obj;
+
+    if(!title.isEmpty()){
+        obj["name"] = title;
+    }
+
+    if(!userComment.isEmpty()){
+        obj["user_comment"] = userComment;
+    }
+
+    if(!smallAbout.isEmpty()){
+        obj["small_about"] = smallAbout;
+    }
+
+    if(!bigAbout.isEmpty()){
+        obj["big_about"] = bigAbout;
+    }
+
+    return QJsonDocument(obj).toJson();
+}
+
