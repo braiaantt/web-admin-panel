@@ -19,6 +19,8 @@ FeaturesHandler::~FeaturesHandler()
 
 void FeaturesHandler::init()
 {
+    setWindowTitle("Características del proyecto");
+
     projectService = factory->makeProjectService(this);
     featureService = factory->makeFeatureService(this);
     connectSignalsAndSlots();
