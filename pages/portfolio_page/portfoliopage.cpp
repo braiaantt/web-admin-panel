@@ -128,6 +128,19 @@ void PortfolioPage::loadPortfolio()
 
 //------ Public Slots ------
 
+void PortfolioPage::refreshProject(const Project &project)
+{
+    QHBoxLayout *layout = (QHBoxLayout*)ui->scrollAreaProjectWidgetContents->layout();
+    for(int i = 0; i<layout->count(); i++){
+        PortfolioProject *projectWidget = qobject_cast<PortfolioProject*>(layout->itemAt(i)->widget());
+        if(projectWidget && projectWidget->getProject().getId() == project.getId()){
+            projectWidget->setProject(project);
+            projectService->getProjectCover(project.getId(), project.getCoverPath());
+            break;
+        }
+    }
+}
+
 void PortfolioPage::deleteProject(int projectId)
 {
     QHBoxLayout *layout = (QHBoxLayout*)ui->scrollAreaProjectWidgetContents->layout();
