@@ -1,5 +1,6 @@
 #include "portfoliopage.h"
 #include "ui_portfoliopage.h"
+#include <QMessageBox>
 #include "createproject.h"
 #include "portfolioproject.h"
 #include "utils.h"
@@ -37,6 +38,7 @@ void PortfolioPage::connectSignalsAndSlots()
     connect(portfolioService, &PortfolioService::portfolioReceipt, this, &PortfolioPage::setPortfolio);
     connect(portfolioService, &PortfolioService::userPhotoUpdated, this, &PortfolioPage::userPhotoUpdated);
     connect(portfolioService, &PortfolioService::userPhotoReceipt, this, &PortfolioPage::setUserPhoto);
+    connect(portfolioService, &PortfolioService::portfolioUpdated, this, &PortfolioPage::portfolioUpdated);
     connect(portfolioService, &PortfolioService::errorOcurred, this, &PortfolioPage::errorOcurred);
 
     connect(technologyService, &TechnologyService::techIconReceipt, this, &PortfolioPage::techIconReceipt);
@@ -47,6 +49,33 @@ void PortfolioPage::connectSignalsAndSlots()
 }
 
 //------ UI Slots ------
+
+void PortfolioPage::on_pushButtonUpdateName_clicked()
+{
+    QString newName = ui->lineEditName->text();
+    Portfolio portfolio;
+    portfolio.setUserName(newName);
+
+    portfolioService->updatePortfolio(portfolio);
+}
+
+void PortfolioPage::on_pushButtonUpdateProfession_clicked()
+{
+    QString newProfession = ui->lineEditProfession->text();
+    Portfolio portfolio;
+    portfolio.setUserProfession(newProfession);
+
+    portfolioService->updatePortfolio(portfolio);
+}
+
+void PortfolioPage::on_pushButtonUpdateAbout_clicked()
+{
+    QString newUserAbout = ui->plainTextAbout->toPlainText();
+    Portfolio portfolio;
+    portfolio.setUserAbout(newUserAbout);
+
+    portfolioService->updatePortfolio(portfolio);
+}
 
 void PortfolioPage::on_pushButtonAddTechnology_clicked()
 {
@@ -167,6 +196,11 @@ void PortfolioPage::goToProject(const Project &project)
 void PortfolioPage::userPhotoUpdated(const QString &path)
 {
     portfolioService->getUserPhoto(path);
+}
+
+void PortfolioPage::portfolioUpdated()
+{
+    QMessageBox::information(this, "Mensaje", "El portfolio se actualizó correctamente.");
 }
 
 void PortfolioPage::errorOcurred(const QString &message)
