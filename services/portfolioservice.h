@@ -15,18 +15,21 @@ public:
 
     void getPortfolio();
     void getUserPhoto(const QString &path);
+    void updatePortfolio(const Portfolio &portfolio);
     void updateUserPhoto(int portfolioId, const QString &srcPath);
 
 signals:
     void portfolioReceipt(const Portfolio &portfolio);
     void userPhotoReceipt(const QPixmap& photo);
     void userPhotoUpdated(const QString &path);
+    void portfolioUpdated();
     void errorOcurred(const QString &message);
 
 private slots:
     void getPortfolioFinished();
     void updateUserPhotoFinished();
     void getUserPhotoFinished();
+    void updatePortfolioFinished();
 
 private:
     ApiClient *apiClient;
@@ -39,6 +42,7 @@ private:
     QHttpMultiPart* makeUserPhotoMultiPart(const QString &srcPath);
     QVector<Technology> getTechnologiesFromArray(const QJsonArray &array);
     QVector<Project> getProjectsFromArray(const QJsonArray &array);
+    QByteArray getPortfolioUpdateBody(const Portfolio &portfolio);
 };
 
 #endif // PORTFOLIOSERVICE_H
