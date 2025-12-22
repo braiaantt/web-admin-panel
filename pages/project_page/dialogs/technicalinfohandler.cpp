@@ -19,6 +19,8 @@ TechnicalInfoHandler::~TechnicalInfoHandler()
 
 void TechnicalInfoHandler::init()
 {
+    setWindowTitle("Información técnica del proyecto");
+
     projectService = factory->makeProjectService(this);
     technicalInfoService = factory->makeTechnicalInfoService(this);
     connectSignalsAndSlots();
