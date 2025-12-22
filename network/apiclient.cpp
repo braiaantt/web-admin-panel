@@ -32,6 +32,14 @@ QNetworkReply* ApiClient::updateUserPhoto(int portfolioId, QHttpMultiPart *multi
     return basicRequests->putMultipart(finalEndpoint, multiPart, headers);
 }
 
+QNetworkReply* ApiClient::updatePortfolio(const QByteArray &body)
+{
+    QMap<QByteArray,QByteArray> headers;
+    headers.insert("Authorization", ("Bearer " + accessToken).toUtf8());
+
+    return basicRequests->put(portfolioEndpoint, body, headers);
+}
+
 //-- Technology --
 
 QNetworkReply* ApiClient::postTechnology(QHttpMultiPart *multiPart)
