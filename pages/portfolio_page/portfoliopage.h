@@ -5,7 +5,6 @@
 #include "servicefactory.h"
 #include "portfolioservice.h"
 #include "technologyservice.h"
-#include "entitytechservice.h"
 #include "projectservice.h"
 #include "portfolio.h"
 
@@ -33,6 +32,7 @@ private slots:
     void techIconReceipt(int techId, const QPixmap &pixmap);
     void refreshTechnologies();
     void projectCoverReceipt(int projectId, const QPixmap &pixmap);
+    void portfolioUpdated();
     void goToProject(const Project &project);
     void errorOcurred(const QString &message);
 
@@ -44,6 +44,12 @@ private slots:
     void on_pushButtonUpdatePhoto_clicked();
 
     void on_pushButtonHandleTechnologies_clicked();
+
+    void on_pushButtonUpdateName_clicked();
+
+    void on_pushButtonUpdateProfession_clicked();
+
+    void on_pushButtonUpdateAbout_clicked();
 
 signals:
     void projectClicked(const Project &project);
