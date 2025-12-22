@@ -20,6 +20,7 @@ public:
     void getProjectFeatures(int projectId);
     void getProjectTechnicalInfo(int projectId);
     void getProjectImagePaths(int projectId);
+    void updateProject(const Project &project, int projectId);
     void deleteProject(int projectId);
 
 private slots:
@@ -28,6 +29,7 @@ private slots:
     void getProjectFeaturesFinished();
     void getProjectTechnicalInfoFinished();
     void getImagePathsFinished();
+    void updateProjectFinished();
     void deleteProjectFinished();
 
 signals:
@@ -36,6 +38,7 @@ signals:
     void projectFeaturesReceipt(const QVector<Feature> &feats);
     void projectTechnicalInfoReceipt(const QVector<TechnicalInfo> &info);
     void imagePathsReceipt(const QVector<QString> &paths);
+    void projectUpdated(const Project &project);
     void projectDeleted();
     void errorOcurred(const QString &message);
 
@@ -51,6 +54,8 @@ private:
     void handleProjectFeaturesReceipt(QVector<Feature> &container, const QByteArray &data);
     void handleProjectTechnicalInfo(QVector<TechnicalInfo> &container, const QByteArray &data);
     void handleGetImagePaths(QVector<QString> &container, const QByteArray &data);
+    Project handleUpdateProjectFinished(const QByteArray &data);
+    QByteArray getProjectUpdateBody(const Project &project);
 };
 
 #endif // PROJECTSERVICE_H
