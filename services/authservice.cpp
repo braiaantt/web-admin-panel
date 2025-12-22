@@ -1,6 +1,7 @@
 #include "authservice.h"
 #include <QJsonObject>
 #include "configmanager.h"
+#include "networkutils.h"
 
 AuthService::AuthService(ApiClient *apiClient, QObject *parent)
     : QObject(parent)
@@ -31,18 +32,16 @@ void AuthService::login(const QString &email, const QString &password)
 void AuthService::loginFinished()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-    if(!reply){
-        emit error("Null Reply");
+
+    QString message;
+    if(!NetworkUtils::checkError(reply, message)){
+        emit error(message);
+        reply->deleteLater();
         return;
     }
 
-    if(reply->error() == QNetworkReply::NoError){
-
-        handleLoginFinished(reply->readAll());
-        emit loginSuccess();
-    } else {
-        emit error(reply->errorString());
-    }
+    handleLoginFinished(reply->readAll());
+    emit loginSuccess();
 
     reply->deleteLater();
 }
