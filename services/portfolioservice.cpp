@@ -48,6 +48,19 @@ void PortfolioService::getUserPhoto(const QString &path)
     connect(reply, &QNetworkReply::finished, this, &PortfolioService::getUserPhotoFinished);
 }
 
+void PortfolioService::updatePortfolio(const Portfolio &portfolio)
+{
+    QByteArray body = getPortfolioUpdateBody(portfolio);
+    QNetworkReply *reply = apiClient->updatePortfolio(body);
+
+    if(!reply){
+        emit errorOcurred("PortfolioService - UpdatePortfolio: Null Reply. Not Sended");
+        return;
+    }
+
+    connect(reply, &QNetworkReply::finished, this, &PortfolioService::updatePortfolioFinished);
+}
+
 //------ Private Slots ------
 
 void PortfolioService::getPortfolioFinished()
@@ -105,6 +118,20 @@ void PortfolioService::updateUserPhotoFinished()
     }
 
     emit userPhotoUpdated(handleUpdateUserPhoto(reply->readAll()));
+    reply->deleteLater();
+}
+
+void PortfolioService::updatePortfolioFinished()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    QString errorMsg;
+    if(!NetworkUtils::checkError(reply, errorMsg)){
+        emit errorOcurred("PortfolioService - UpdatePortfolio" + errorMsg);
+        reply->deleteLater();
+        return;
+    }
+
+    emit portfolioUpdated();
     reply->deleteLater();
 }
 
@@ -198,4 +225,26 @@ QHttpMultiPart* PortfolioService::makeUserPhotoMultiPart(const QString &srcPath)
     multiPart->append(filePart);
 
     return multiPart;
+}
+
+QByteArray PortfolioService::getPortfolioUpdateBody(const Portfolio &portfolio)
+{
+    QString name = portfolio.getUserName();
+    QString profession = portfolio.getUserProfession();
+    QString about = portfolio.getUserAbout();
+    QJsonObject obj;
+
+    if(!name.isEmpty()){
+        obj["user_name"] = name;
+    }
+
+    if(!profession.isEmpty()){
+        obj["user_profession"] = profession;
+    }
+
+    if(!about.isEmpty()){
+        obj["user_about"] = about;
+    }
+
+    return QJsonDocument(obj).toJson();
 }
