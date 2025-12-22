@@ -24,6 +24,7 @@ public:
 private slots:
     void technologiesRelated(const QVector<Technology> &techs);
     void techIconReceipt(int techId, const QPixmap &pixmap);
+    void projectUpdated(const Project &project);
     void projectDeleted();
     void errorOcurred(const QString &message);
 
@@ -40,8 +41,17 @@ private slots:
 
     void on_pushButtonDeleteProject_clicked();
 
+    void on_pushButtonUpdateTitle_clicked();
+
+    void on_pushButtonUpdateMyComment_clicked();
+
+    void on_pushButtonUpdateSmallAbout_clicked();
+
+    void on_pushButtonUpdateBigAbout_clicked();
+
 signals:
     void backToPortfolio(ProjectPage *page);
+    void refreshProject(const Project &project);
     void deleteProject(int projectId);
 
 private:
@@ -52,6 +62,7 @@ private:
     EntityImageService *entityImageService;
     ProjectService *projectService;
     Project project;
+    bool projectChanged;
 
     //------ Initialization ------
     void init();
