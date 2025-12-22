@@ -80,6 +80,7 @@ void MainWindow::projectClicked(const Project &project)
     QWidget* stackedWidgetPage = ui->stackedWidgetPages->findChild<QWidget*>(PageName::PROJECT);
     if(stackedWidgetPage && stackedWidgetPage->layout()){
         connect(projectPage, &ProjectPage::backToPortfolio, this, &MainWindow::backToPortfolioPage);
+        connect(projectPage, &ProjectPage::refreshProject, portfolioPage, &PortfolioPage::refreshProject);
         connect(projectPage, &ProjectPage::deleteProject, portfolioPage, &PortfolioPage::deleteProject);
         stackedWidgetPage->layout()->addWidget(projectPage);
         ui->stackedWidgetPages->setCurrentWidget(stackedWidgetPage);
@@ -94,7 +95,7 @@ void MainWindow::backToPortfolioPage(ProjectPage *page)
     QLayout *layout = stackedWidgetPage->layout();
     if(!layout) return;
 
-    layout->removeWidget(page);
+    layout->removeWidget(page); //Remove project page widget
     page->deleteLater();
 
     QWidget *widgetPortfolio= ui->stackedWidgetPages->findChild<QWidget*>(PageName::PORTFOLIO);
