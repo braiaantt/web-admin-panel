@@ -70,9 +70,9 @@ color: #fff;
           <widget class="QLineEdit" name="lineEditTitle"/>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButtonCommitTitle">
+          <widget class="QPushButton" name="pushButtonUpdateTitle">
            <property name="text">
-            <string>PushButton</string>
+            <string>Actualizar</string>
            </property>
           </widget>
          </item>
@@ -96,7 +96,7 @@ color: #fff;
           <widget class="QPlainTextEdit" name="plainTextEditMyComments"/>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButtonCommitMyComments">
+          <widget class="QPushButton" name="pushButtonUpdateMyComment">
            <property name="text">
             <string>Actualizar</string>
            </property>
@@ -124,7 +124,7 @@ color: #fff;
         <widget class="QPlainTextEdit" name="plainTextEditSmallAbout"/>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButtonCommitSmallAbout">
+        <widget class="QPushButton" name="pushButtonUpdateSmallAbout">
          <property name="text">
           <string>Actualizar</string>
          </property>
@@ -150,7 +150,7 @@ color: #fff;
         <widget class="QPlainTextEdit" name="plainTextEditBigAbout"/>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButtonCommitBigAbout">
+        <widget class="QPushButton" name="pushButtonUpdateBigAbout">
          <property name="text">
           <string>Actualizar</string>
          </property>
@@ -336,7 +336,7 @@ background-color: #334;
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>1062</width>
+           <width>1064</width>
            <height>160</height>
           </rect>
          </property>
