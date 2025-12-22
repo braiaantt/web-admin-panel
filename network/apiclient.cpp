@@ -130,6 +130,15 @@ QNetworkReply* ApiClient::getProjectImagePaths(int projectId)
     return basicRequests->get(finalEndpoint, headers);
 }
 
+QNetworkReply* ApiClient::updateProject(const QByteArray &body, int projectId)
+{
+    QMap<QByteArray,QByteArray> headers;
+    headers.insert("Authorization", ("Bearer " + accessToken).toUtf8());
+    QString finalEndpoint = projectEndpoint + "/" + QString::number(projectId);
+
+    return basicRequests->put(finalEndpoint, body, headers);
+}
+
 QNetworkReply* ApiClient::deleteProject(int projectId)
 {
     QMap<QByteArray,QByteArray> headers;
