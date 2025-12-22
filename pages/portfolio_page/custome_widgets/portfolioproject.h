@@ -18,6 +18,7 @@ public:
 
     //------ Setters ------
     void setCoverImage(const QPixmap &pixmap);
+    void setProject(const Project &project);
 
     //------ Getters ------
     const Project& getProject() const;
