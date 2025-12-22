@@ -20,6 +20,8 @@ HandleImages::~HandleImages()
 
 void HandleImages::init()
 {
+    setWindowTitle("Imágenes del proyecto");
+
     projectService = factory->makeProjectService(this);
     entityImageService = factory->makeEntityImageService(this);
 
