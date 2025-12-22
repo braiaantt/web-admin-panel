@@ -23,6 +23,7 @@ public:
     void loadPortfolio();
 
 public slots:
+    void refreshProject(const Project &project);
     void deleteProject(int projectId);
 
 private slots:
