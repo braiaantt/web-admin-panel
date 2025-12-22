@@ -33,6 +33,12 @@ void PortfolioProject::setCoverImage(const QPixmap &pixmap)
     ui->labelImage->setPixmap(pixmap);
 }
 
+void PortfolioProject::setProject(const Project &_project)
+{
+    project = _project;
+    init();
+}
+
 //------ Getters ------
 
 const Project& PortfolioProject::getProject() const
