@@ -35,6 +35,7 @@ public:
     QNetworkReply* getProjectFeatures(int projectId);
     QNetworkReply* getProjectTechnicalInfo(int projectId);
     QNetworkReply* getProjectImagePaths(int projectId);
+    QNetworkReply* updateProject(const QByteArray &body, int projectId);
     QNetworkReply* deleteProject(int projectId);
 
     //-- Project Images --
